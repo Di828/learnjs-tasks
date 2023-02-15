@@ -1,0 +1,3 @@
+let planetEarth;
+
+let currentVisitorName;
