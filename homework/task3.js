@@ -11,17 +11,10 @@ class Product {
         this.description = description || 'No description.';
     }
 
-    valueOfProperty = {
-        'name' : () => this.name.toLowerCase(),
-        'price' : () => this.price,
-        'quantity' : () => this.quantity,
-        'description' : () => this.description.toLowerCase(),
-    }
-
     possibleOperations = {
-        'starts' :   (value, condition) => value.startsWith(condition.toLowerCase()),
-        'contains' : (value, condition) => value.includes(condition.toLowerCase()),
-        'ends' :      (value, condition) => value.endsWith(condition.toLowerCase()),
+        'starts' :   (value, condition) => value.toLowerCase().startsWith(condition.toLowerCase()),
+        'contains' : (value, condition) => value.toLowerCase().includes(condition.toLowerCase()),
+        'ends' :      (value, condition) => value.toLowerCase().endsWith(condition.toLowerCase()),
         '=' : (value, condition) => +value === +condition,
         '>' : (value, condition) => +value > +condition,
         '>=' : (value, condition) => +value >= +condition,
@@ -35,7 +28,7 @@ class Product {
 
     fitsTheConditions(conditions){        
         for (let [property, operation, conditionValue] of conditions){
-            if (Object.keys(this.valueOfProperty).includes(property)){
+            if (Object.keys(this).includes(property)){
                 if (!this.propertyValueSatisfiesTheCondition(property, operation, conditionValue)){
                     return false;
                 }
@@ -45,10 +38,8 @@ class Product {
         return true;
     }
 
-    propertyValueSatisfiesTheCondition(property, operation, conditionValue){        
-        let value = this.valueOfProperty[property]();
-
-        return this.possibleOperations[operation](value, conditionValue);
+    propertyValueSatisfiesTheCondition(property, operation, conditionValue){                
+        return this.possibleOperations[operation](this[property], conditionValue);
     }
 }
 
